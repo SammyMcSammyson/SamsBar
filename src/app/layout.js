@@ -1,4 +1,4 @@
-import {Inter} from "next/font/google"
+import { Inter } from 'next/font/google';
 import './globals.css';
 import {
   ClerkProvider,
@@ -8,11 +8,11 @@ import {
   UserButton,
 } from '@clerk/nextjs';
 
-const inter = Inter ({
-  subset: ["Latin"]
-})
+const inter = Inter({
+  subset: ['Latin'],
+});
 
-import NavBar from "../components/NavBar.jsx"
+import NavBar from '../components/NavBar.jsx';
 
 export const metadata = {
   title: 'Sams Bar',
