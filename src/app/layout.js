@@ -8,9 +8,8 @@ import {
   UserButton,
 } from '@clerk/nextjs';
 
-const inter = Inter({
-  subset: ['Latin'],
-});
+const inter = Inter({ subsets: ['latin'] })
+
 
 import NavBar from '../components/NavBar.jsx';
 
