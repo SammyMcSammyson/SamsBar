@@ -1,4 +1,4 @@
-import { Inter } from 'next/font/google';
+import { Nova_Mono } from 'next/font/google';
 import './globals.css';
 import {
   ClerkProvider,
@@ -7,9 +7,12 @@ import {
   SignedOut,
   UserButton,
 } from '@clerk/nextjs';
+import { ToastContainer } from 'react-toastify';
 
-const inter = Inter({ subsets: ['latin'] })
-
+const inter = Nova_Mono({
+  weight: '400',
+  subsets: ['latin'],
+});
 
 import NavBar from '../components/NavBar.jsx';
 
@@ -23,6 +26,7 @@ export default function RootLayout({ children }) {
     <ClerkProvider>
       <html lang='en'>
         <body className={inter.className}>
+          <ToastContainer />
           <NavBar />
           {children}
         </body>

@@ -7,23 +7,25 @@ import {
 } from '@clerk/nextjs';
 import Link from 'next/link';
 
-// import { auth } from '@clerk/nextjs/dist/types/server';
+import { auth, currentUser } from '@clerk/nextjs/server';
 
-export default function Header() {
+export default async function Header() {
+  const user = await currentUser();
+
   return (
     <>
       <SignedIn>
         <UserButton />
         <Link href='/'>Home</Link>
         <Link href='/posts'>Posts</Link>
-        <Link href='/profile'>Profile</Link>
+        {user && <Link href={`/profile/${user.username}`}>Profile</Link>}
         <Link href='/submission'>Add Submission</Link>
       </SignedIn>
       <SignedOut>
-      <Link href='/'>Home</Link>
-      <Link href='/posts'>Posts</Link>
-        <SignInButton mode='modal'> Sign In </SignInButton>
-        <SignUpButton mode='modal'> Sign Up </SignUpButton>
+        <Link href='/'>Home</Link>
+        <Link href='/posts'>Posts</Link>
+        <SignInButton mode='modal'>Sign In</SignInButton>
+        <SignUpButton mode='modal'>Sign Up</SignUpButton>
       </SignedOut>
     </>
   );
