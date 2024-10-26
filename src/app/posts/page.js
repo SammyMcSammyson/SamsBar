@@ -37,12 +37,7 @@ export default async function postsPage() {
       [postId]
     );
     const post = result.rows[0];
-    console.log(
-      'delete post function',
-      post,
-      snowboardingPosts.username,
-      user.username
-    );
+    console.log('delete post function', post, user.username);
 
     if (post.userid === user.username) {
       await db.query('DELETE FROM snowboarding_posts WHERE id = $1', [postId]);
@@ -62,12 +57,7 @@ export default async function postsPage() {
       [commentId]
     );
     const comment = result.rows[0];
-    console.log(
-      'delete comment function',
-      comment,
-      snowboardingComments.username,
-      user.username
-    );
+    console.log('delete comment function', comment, user.username);
 
     if (comment.userid === user.username) {
       await db.query('DELETE FROM snowboarding_posts WHERE id = $1', [
@@ -93,7 +83,7 @@ export default async function postsPage() {
               <input type='hidden' name='postId' value={post.id} />
 
               <div className='postDelete' type='submit'>
-                <ToastError/>
+                <ToastError />
               </div>
             </form>
             <div>
