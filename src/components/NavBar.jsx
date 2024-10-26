@@ -23,7 +23,6 @@ export default async function Header() {
       </SignedIn>
       <SignedOut>
         <Link href='/'>Home</Link>
-        <Link href='/posts'>Posts</Link>
         <SignInButton mode='modal'>Sign In</SignInButton>
         <SignUpButton mode='modal'>Sign Up</SignUpButton>
       </SignedOut>
