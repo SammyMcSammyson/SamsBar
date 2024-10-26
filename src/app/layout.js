@@ -8,7 +8,6 @@ import {
   UserButton,
 } from '@clerk/nextjs';
 import { ToastContainer } from 'react-toastify';
-
 const inter = Nova_Mono({
   weight: '400',
   subsets: ['latin'],
@@ -26,9 +25,8 @@ export default function RootLayout({ children }) {
     <ClerkProvider>
       <html lang='en'>
         <body className={inter.className}>
-          <ToastContainer />
           <NavBar />
-          {children}
+        {children}
         </body>
       </html>
     </ClerkProvider>

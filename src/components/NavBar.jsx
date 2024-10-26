@@ -18,7 +18,7 @@ export default async function Header() {
         <UserButton />
         <Link href='/'>Home</Link>
         <Link href='/posts'>Posts</Link>
-        {user && <Link href={`/profile/${user.username}`}>Profile</Link>}
+        {user && <Link href={`/profile/me`}>Profile</Link>}
         <Link href='/submission'>Add Submission</Link>
       </SignedIn>
       <SignedOut>

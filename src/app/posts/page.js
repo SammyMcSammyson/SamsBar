@@ -2,10 +2,13 @@ import { db } from '../../utils/utilities.js';
 import Link from 'next/link';
 import { revalidatePath } from 'next/cache';
 import { auth, currentUser } from '@clerk/nextjs/server';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
+import ToastError from '@/components/Toastify.jsx';
+import { ClerkProvider } from '@clerk/nextjs';
 
 export default async function postsPage() {
   const user = await currentUser();
+
   const snowboardingPosts = (
     await db.query(`SELECT * FROM snowboarding_posts ORDER BY id DESC`)
   ).rows;
@@ -45,14 +48,42 @@ export default async function postsPage() {
       await db.query('DELETE FROM snowboarding_posts WHERE id = $1', [postId]);
       revalidatePath('/posts');
     } else {
-      console.log('Idiot you can not remove that you did not make it');
+      console.log(
+        'Idiot you can not remove the post you did not make it stop being stupid'
+      );
+    }
+  }
+  async function handleDeleteComment(formData) {
+    'use server';
+    const commentId = formData.get('commentId');
+
+    const result = await db.query(
+      'SELECT username FROM snowboarding_comments WHERE id = $1',
+      [commentId]
+    );
+    const comment = result.rows[0];
+    console.log(
+      'delete comment function',
+      comment,
+      snowboardingComments.username,
+      user.username
+    );
+
+    if (comment.userid === user.username) {
+      await db.query('DELETE FROM snowboarding_posts WHERE id = $1', [
+        commentId,
+      ]);
+      revalidatePath('/posts');
+    } else {
+      console.log(
+        'Idiot you can not remove the comment you did not make it stop being stupid'
+      );
     }
   }
 
   return (
     <>
       <h1> posts </h1>
-
       <ul>
         {snowboardingPosts.map((post) => (
           <li key={post.id}>
@@ -60,9 +91,10 @@ export default async function postsPage() {
             <p>{post.post}</p>
             <form action={handleDeletePost} className='deleteForm'>
               <input type='hidden' name='postId' value={post.id} />
-              <button className='blogDelete' type='submit'>
-                delete
-              </button>
+
+              <div className='postDelete' type='submit'>
+                <ToastError/>
+              </div>
             </form>
             <div>
               <h3>Comments</h3>
@@ -73,6 +105,17 @@ export default async function postsPage() {
                       {comment.username}
                     </Link>
                     <p>{comment.comment}</p>
+                    <form action={handleDeleteComment} className='deleteForm'>
+                      <input
+                        type='hidden'
+                        name='commentId'
+                        value={comment.id}
+                      />
+
+                      <div className='postDelete' type='submit'>
+                        <ToastError />
+                      </div>
+                    </form>
                   </li>
                 ))}
               </ul>
