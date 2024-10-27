@@ -22,6 +22,7 @@ export default function HomePage() {
           family dinner and play some drinking games — yes, that means even more
           free beer!
         </p>
+        <div class='scroll-indicator'>Scroll for more</div>
         <p>
           Want to hang out with other peeps, join in on the fun and connect with
           other solo travellers by signing up and leaving a post.
