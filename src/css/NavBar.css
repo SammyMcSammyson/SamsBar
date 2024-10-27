@@ -1,0 +1,11 @@
+.masterContainer {
+  background-color: aqua;
+}
+
+.signedout {
+  display: flex;
+}
+
+.component1 {
+  margin-right: 0.5rem;
+}

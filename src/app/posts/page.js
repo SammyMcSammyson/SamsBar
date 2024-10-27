@@ -15,7 +15,7 @@ export default async function postsPage() {
   ).rows;
 
   const snowboardingComments = (
-    await db.query(`SELECT * FROM snowboarding_comments`)
+    await db.query(`SELECT * FROM snowboarding_comments ORDER BY id ASC`)
   ).rows;
 
   const commentsByPostId = snowboardingComments.reduce((acc, comment) => {
@@ -96,6 +96,165 @@ export default async function postsPage() {
       };
     }
   }
+
+  async function handleLike(formData) {
+    'use server';
+
+    const postId = formData.get('postId');
+    const username = formData.get('username');
+    //started with such lofty goals little did I know of the pain to come.
+
+    const likeCheker = await db.query(
+      `SELECT * FROM post_likes WHERE username = $1 AND post_id = $2`,
+      [username, postId]
+    ); //super simple
+
+    if (likeCheker.rows.length > 0) {
+      await db.query(
+        `DELETE FROM post_likes WHERE username = $1 AND post_id = $2`,
+        [username, postId]
+      ); // also super simple
+
+      await db.query(
+        `UPDATE snowboarding_posts SET "like" = "like" - 1 WHERE id = $1`,
+        [postId]
+      ); //it is always the quotes which slip me up medium dificulty but still doable especially since the SQL was right.
+
+      console.log('Like deleted you noob');
+    } else {
+      await db.query(
+        `INSERT INTO post_likes (username, post_id) VALUES ($1, $2)`,
+        [username, postId]
+      ); //did not nail the SQL logic for this at all needed to do some googleing but I had the right idea. This was harddddddd.
+
+      await db.query(
+        `UPDATE snowboarding_posts SET "like" = "like" + 1 WHERE id = $1`,
+        [postId]
+      ); //did not nail the SQL logic for this at all needed to do some googleing but I had the right idea. Thankfully mark zuckeberg did all the hard work 20 years ago and I can copy him.
+
+      console.log('Post liked mofo');
+    }
+    revalidatePath('/posts'); //update at the end.
+  }
+
+  async function handleDislike(formData) {
+    'use server';
+
+    const postId = formData.get('postId');
+    const username = formData.get('username');
+    //same code
+
+    const likeCheker = await db.query(
+      `SELECT * FROM post_dislikes WHERE username = $1 AND post_id = $2`,
+      [username, postId]
+    );
+
+    if (likeCheker.rows.length > 0) {
+      await db.query(
+        `DELETE FROM post_dislikes WHERE username = $1 AND post_id = $2`,
+        [username, postId]
+      );
+
+      await db.query(
+        `UPDATE snowboarding_posts SET "dislikes" = "dislikes" - 1 WHERE id = $1`,
+        [postId]
+      );
+
+      console.log('disLike deleted you noob');
+    } else {
+      await db.query(
+        `INSERT INTO post_dislikes (username, post_id) VALUES ($1, $2)`,
+        [username, postId]
+      ); //did not nail the SQL logic for this at all needed to do some googleing but I had the right idea. This was harddddddd.
+
+      await db.query(
+        `UPDATE snowboarding_posts SET "dislike" = "dislike" + 1 WHERE id = $1`,
+        [postId]
+      ); //did not nail the SQL logic for this at all needed to do some googleing but I had the right idea. Thankfully mark zuckeberg did all the hard work 20 years ago and I can copy him.
+
+      console.log('Post disliked mofo');
+    }
+    revalidatePath('/posts'); //update at the end.
+  }
+  async function handleCommentLike(formData) {
+    'use server';
+
+    const postId = formData.get('postId');
+    const username = formData.get('username');
+    //same code
+
+    const likeCheker = await db.query(
+      `SELECT * FROM comment_likes WHERE username = $1 AND post_id = $2`,
+      [username, postId]
+    );
+
+    if (likeCheker.rows.length > 0) {
+      await db.query(
+        `DELETE FROM comment_likes WHERE username = $1 AND post_id = $2`,
+        [username, postId]
+      );
+
+      await db.query(
+        `UPDATE snowboarding_comments SET "like" = "like" - 1 WHERE id = $1`,
+        [postId]
+      );
+
+      console.log('disLike deleted you noob');
+    } else {
+      await db.query(
+        `INSERT INTO comment_likes (username, post_id) VALUES ($1, $2)`,
+        [username, postId]
+      );
+      await db.query(
+        `UPDATE snowboarding_comments SET "like" = "like" + 1 WHERE id = $1`,
+        [postId]
+      );
+
+      console.log('Comment liked mofo');
+    }
+    revalidatePath('/posts'); //update at the end.
+  }
+
+  async function handleCommentDislike(formData) {
+    'use server';
+
+    const postId = formData.get('postId');
+    const username = formData.get('username');
+    //same code
+
+    const likeCheker = await db.query(
+      `SELECT * FROM comment_dislikes WHERE username = $1 AND post_id = $2`,
+      [username, postId]
+    );
+
+    if (likeCheker.rows.length > 0) {
+      await db.query(
+        `DELETE FROM comment_dislikes WHERE username = $1 AND post_id = $2`,
+        [username, postId]
+      );
+
+      await db.query(
+        `UPDATE snowboarding_comments SET "dislike" = "dislike" - 1 WHERE id = $1`,
+        [postId]
+      );
+
+      console.log('disLike deleted you noob');
+    } else {
+      await db.query(
+        `INSERT INTO comment_dislikes (username, post_id) VALUES ($1, $2)`,
+        [username, postId]
+      );
+
+      await db.query(
+        `UPDATE snowboarding_comments SET "dislike" = "dislike" + 1 WHERE id = $1`,
+        [postId]
+      );
+
+      console.log('Post disliked you meaniie');
+    }
+    revalidatePath('/posts');
+  }
+
   return (
     <>
       <h1>Posts</h1>
@@ -106,11 +265,27 @@ export default async function postsPage() {
               {post.userid}
             </Link>
             <p className='post-content'>{post.post}</p>
-
             <DropdownMenuPost
               handleDelete={handleDeletePost}
               postId={post.id}
             />
+            <p>{post.like}</p>
+            <p>{post.dislikes}</p>
+
+            <form action={handleLike}>
+              <input type='hidden' name='postId' value={post.id} />
+              <input type='hidden' name='username' value={user.username} />
+              <button type='submit' className='like-button'>
+                👍
+              </button>
+            </form>
+            <form action={handleDislike}>
+              <input type='hidden' name='postId' value={post.id} />
+              <input type='hidden' name='username' value={user.username} />
+              <button type='submit' className='like-button'>
+                👎
+              </button>
+            </form>
 
             <div className='comments-section'>
               <h3>Comments</h3>
@@ -130,6 +305,31 @@ export default async function postsPage() {
                         handleDeleteComments={handleDeleteComment}
                         commentId={comment.id}
                       />
+                      <p>{comment.like}</p>
+                      <p>{comment.dislike}</p>
+
+                      <form action={handleCommentLike}>
+                        <input type='hidden' name='postId' value={comment.id} />
+                        <input
+                          type='hidden'
+                          name='username'
+                          value={user.username}
+                        />
+                        <button type='submit' className='like-button'>
+                          👍
+                        </button>
+                      </form>
+                      <form action={handleCommentDislike}>
+                        <input type='hidden' name='postId' value={comment.id} />
+                        <input
+                          type='hidden'
+                          name='username'
+                          value={user.username}
+                        />
+                        <button type='submit' className='like-button'>
+                          👎
+                        </button>
+                      </form>
                     </li>
                   );
                 })}
