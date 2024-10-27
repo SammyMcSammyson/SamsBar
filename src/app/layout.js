@@ -16,17 +16,18 @@ const inter = Nova_Mono({
 import NavBar from '../components/NavBar.jsx';
 
 export const metadata = {
-  title: 'Sams Bar',
+  title: 'Chalet Sam',
   description: 'Menace on Sobriety',
+  icon: '/favicon.ico',
+  apple: '/apple-touch-icon.png',
 };
-
 export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
       <html lang='en'>
         <body className={inter.className}>
           <NavBar />
-        {children}
+          {children}
         </body>
       </html>
     </ClerkProvider>
