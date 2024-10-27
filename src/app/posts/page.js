@@ -358,7 +358,7 @@ export default async function postsPage() {
                       name='post'
                       type='text'
                       required
-                      className="textbox"
+                      className='textbox'
                     ></textarea>
 
                     <input
@@ -374,7 +374,7 @@ export default async function postsPage() {
                       value={post.id}
                     />
 
-                    <button type='submit' className='input'>
+                    <button type='submit' className='input1'>
                       Post
                     </button>
                   </form>

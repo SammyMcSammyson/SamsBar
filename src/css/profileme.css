@@ -1,0 +1,98 @@
+.masterProfileContianer {
+  background-color: var(--background-ice);
+  margin-left: 5%;
+  margin-right: 5%;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.bioContianer {
+  border: 2px solid #ccc;
+  margin: 1rem;
+  padding: 1rem;
+}
+
+.postContainer {
+  border: 1px solid var(--neutral-gray);
+  background-color: var(--background-ice);
+  padding: 1rem;
+  margin-bottom: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.postUser {
+  font-weight: bold;
+  color: var(--text-gray);
+  text-decoration: none;
+}
+
+.postContent {
+  margin-top: 0.5rem;
+  color: var(--text-dark);
+}
+
+.commentsSection {
+  margin-top: 1rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--neutral-gray);
+}
+
+.commentContainer {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--neutral-gray);
+  margin-left: 2rem;
+  border: 2px solid #ccc;
+  margin: 1rem;
+  padding: 1rem;
+}
+
+.commentContainer:last-child {
+  border-bottom: none;
+}
+
+.commentUser {
+  font-weight: bold;
+  color: var(--text-gray);
+  text-decoration: none;
+}
+
+.commentHeader {
+  float: right;
+}
+
+.commentContent {
+  margin-top: 0.25rem;
+  color: var(--text-dark);
+}
+
+.likesContainer {
+  display: flex;
+  margin-left: 1rem;
+  gap: 1rem;
+}
+.buttonContainer {
+  display: flex;
+  gap: 0.5rem;
+}
+.like-button {
+  all: unset;
+  font-size: 1.5rem;
+}
+
+.textbox {
+  height: 2rem;
+  width: 10rem;
+  margin-right: 1rem;
+  align-items: center;
+}
+
+.input {
+  width: 13rem;
+}
+
+.backButton {
+  float: right;
+}

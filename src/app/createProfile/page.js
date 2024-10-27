@@ -1,7 +1,7 @@
 import { auth, currentUser } from '@clerk/nextjs/server';
 import { db } from '@/utils/utilities';
 import { redirect } from 'next/navigation';
-
+import '../../css/profileme.css';
 export default async function createProfile() {
   const { userId } = await auth();
   const user = await currentUser();
@@ -29,11 +29,11 @@ export default async function createProfile() {
 
   return (
     <div>
-      <h1>Testing</h1>
-      <h2>Create Profile </h2>
-      <div>
+      <h1>Create Profile </h1>
+      <p>When you are fininshed just hit Save and you can start posting</p>
+      <div className='postContainer'>
         <form action={handleProfile} className='formSubmission'>
-          <label htmlFor='UserName'>UserName </label>
+          <label htmlFor='UserName'>UserName: &nbsp; &nbsp;</label>
           <input
             id='UserName'
             name='UserName'
@@ -43,8 +43,8 @@ export default async function createProfile() {
             defaultValue={user.username}
             readOnly
           />
-
-          <label htmlFor='FirstName'>First Name </label>
+          <br></br>
+          <label htmlFor='FirstName'>First Name: &nbsp;</label>
           <input
             id='FirstName'
             name='FirstName'
@@ -52,7 +52,8 @@ export default async function createProfile() {
             className='input'
             defaultValue={user?.firstName || ''}
           />
-          <label htmlFor='LastName'>Last Name </label>
+          <br></br>
+          <label htmlFor='LastName'>Last Name: &nbsp; </label>
           <input
             id='LastName'
             name='LastName'
@@ -60,8 +61,8 @@ export default async function createProfile() {
             className='input'
             defaultValue={user?.lastName || ''}
           />
-
-          <label htmlFor='Bio'>Tell us a bit about yourself </label>
+          <br></br>
+          <label htmlFor='Bio'>Tell us a bit about yourself: </label>
           <textarea
             id='Bio'
             name='Bio'
@@ -70,8 +71,8 @@ export default async function createProfile() {
             className='input'
             defaultValue={`Hi, I am ${user.username} and I love snowboarding.`}
           ></textarea>
-
-          <button type='submit' className='input'>
+          <br></br>
+          <button type='submit' className='input1'>
             Save
           </button>
         </form>

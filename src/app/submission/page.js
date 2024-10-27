@@ -2,6 +2,7 @@ import { auth, currentUser } from '@clerk/nextjs/server';
 import { db } from '@/utils/utilities';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import '../../css/submission.css';
 
 export default async function addPosts() {
   const user = await currentUser();
@@ -30,13 +31,13 @@ export default async function addPosts() {
   }
 
   return (
-    <div>
+    <div className='mainSubmissionCointainer'>
       <h1> Add Post </h1>
       <div>
         <div>
           <form action={handleSubmission}>
-            <label htmlFor='post'>Type away</label>
-            <textarea id='post' name='post' type='text' required></textarea>
+            <label htmlFor='post'>Type away </label>
+            <textarea id='post' name='post' type='text' required class="input"></textarea>
 
             <input
               type='hidden'
@@ -45,7 +46,7 @@ export default async function addPosts() {
               value={user.username}
             />
 
-            <button type='submit' className='input'>
+            <button type='submit' className='input1'>
               Post
             </button>
           </form>

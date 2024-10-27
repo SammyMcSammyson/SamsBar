@@ -1,11 +1,19 @@
+.masterContainer {
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
 .titleout {
   color: var(--accent-cyan);
-  width: 50%;
 }
 
 .button-container {
   display: flex;
   float: right;
+}
+
+.title {
+  color: var(--accent-cyan);
 }
 
 .component1,
@@ -24,20 +32,10 @@
 
 @media (max-width: 320px) {
   /* iPhone, portrait 480x320 */
-  .titleout {
-    padding: 7%;
-  }
 }
 @media (min-width: 321px) and (max-width: 410px) {
-  .titleout {
-    padding: 7%;
-    margin-left: 12%;
-  }
 }
 @media (min-width: 410px) and (max-width: 464px) {
-  .titleout {
-    padding-top: 10%;
-  }
 }
 @media (min-width: 642px) and (max-width: 961px) {
   /*landscape iPad */

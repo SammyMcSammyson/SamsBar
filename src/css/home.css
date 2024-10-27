@@ -1,14 +1,15 @@
 button {
   height: 1.5rem;
 }
+.masterHomeContainer {
+  margin-left: 10%;
+  margin-right: 10%;
+}
 
 @media (max-width: 320px) {
   /* iPhone, portrait 480x320 */
 }
 @media (min-width: 321px) and (max-width: 410px) {
-  .announcementContainer {
-    margin-top: -3rem;
-  }
 }
 @media (min-width: 410px) and (max-width: 641px) {
 }

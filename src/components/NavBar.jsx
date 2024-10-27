@@ -18,7 +18,7 @@ export default async function Header() {
     <div className='masterContainer'>
       <div className='signedin'>
         <SignedIn>
-          <h1 className='titleout title'> Chalet Sam </h1>
+          <h1 className='title'> Chalet Sam </h1>
           <BurgerMenu />
         </SignedIn>
       </div>
@@ -26,9 +26,6 @@ export default async function Header() {
       <div>
         <SignedOut>
           <div className='button-container'>
-            <SignUpButton className='component2' mode='modal'>
-              Sign Up
-            </SignUpButton>
             <SignInButton className='component1' mode='modal'>
               Sign In
             </SignInButton>

@@ -1,0 +1,14 @@
+.mainSubmissionCointainer {
+  border: 1px solid var(--neutral-gray);
+  background-color: var(--background-ice);
+  padding: 1rem;
+  margin-bottom: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+.input {
+  margin-right: 1rem;
+}
