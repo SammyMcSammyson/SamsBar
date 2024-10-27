@@ -1,0 +1,68 @@
+/* Post Container */
+.post-container {
+  border: 1px solid var(--neutral-gray);
+  background-color: var(--background-ice);
+  padding: 16px; /* Default padding */
+  margin-bottom: 24px; /* Spacing between posts */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Post User Link */
+.post-user {
+  font-weight: bold;
+  color: var(--text-gray);
+  text-decoration: none;
+}
+
+/* Post Content */
+.post-content {
+  margin-top: 8px; /* Small space under username */
+  color: var(--text-dark);
+}
+
+/* Comments Section */
+.comments-section {
+  margin-top: 16px;
+  padding-top: 8px;
+  border-top: 1px solid var(--neutral-gray);
+}
+
+/* Individual Comment */
+.comment-container {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--neutral-gray);
+}
+
+.comment-container:last-child {
+  border-bottom: none; /* Removes border from the last comment */
+}
+
+/* Comment User Link */
+.comment-user {
+  font-weight: bold;
+  color: var(--text-gray);
+  text-decoration: none;
+}
+
+/* Comment Content */
+.comment-content {
+  margin-top: 4px; /* Space below username */
+  color: var(--text-dark);
+}
+
+/* Delete Form and Button Styling */
+.delete-form {
+  margin-top: 8px; /* Space between post/comment and delete button */
+}
+
+.post-delete,
+.comment-delete {
+  /* background-color: var(--accent-orange); */
+  color: #fff;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}

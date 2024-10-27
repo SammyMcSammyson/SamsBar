@@ -1,10 +1,11 @@
 import { db } from '../../utils/utilities.js';
 import Link from 'next/link';
 import { revalidatePath } from 'next/cache';
-import { auth, currentUser } from '@clerk/nextjs/server';
-import { toast, ToastContainer } from 'react-toastify';
-import ToastError from '@/components/Toastify.jsx';
-import { ClerkProvider } from '@clerk/nextjs';
+import { currentUser } from '@clerk/nextjs/server';
+import DropdownMenuPost from '@/components/Radix-Burger.jsx';
+import DropdownMenuComment from '@/components/Radix-Burger-comment.jsx';
+import '../../css/posts.css';
+import { redirect } from 'next/navigation';
 
 export default async function postsPage() {
   const user = await currentUser();
@@ -12,13 +13,10 @@ export default async function postsPage() {
   const snowboardingPosts = (
     await db.query(`SELECT * FROM snowboarding_posts ORDER BY id DESC`)
   ).rows;
-  console.log('this is snowboarding post', snowboardingPosts);
 
   const snowboardingComments = (
     await db.query(`SELECT * FROM snowboarding_comments`)
   ).rows;
-  console.log(snowboardingComments);
-  //can also do in SQL unless you are like me and spend 30 minutes looking up to find a more complicated solution.
 
   const commentsByPostId = snowboardingComments.reduce((acc, comment) => {
     acc[comment.post_id] = acc[comment.post_id] || [];
@@ -26,7 +24,27 @@ export default async function postsPage() {
     return acc;
   }, {});
 
-  console.log(commentsByPostId);
+  async function handleSubmission(formData) {
+    'use server';
+    console.log('Saving comment to the database...');
+
+    const comment = formData.get('post');
+    const username = formData.get('username');
+    const post_id = formData.get('post_id');
+
+    console.log('This is comment submission:', { comment, username, post_id });
+
+    await db.query(
+      `INSERT INTO snowboarding_comments (comment, username, post_id) 
+      VALUES ($1, $2, $3)`,
+      [comment, username, post_id]
+    );
+
+    console.log('Comment successfully added.');
+
+    revalidatePath('/posts');
+    redirect('/posts');
+  }
 
   async function handleDeletePost(formData) {
     'use server';
@@ -37,17 +55,23 @@ export default async function postsPage() {
       [postId]
     );
     const post = result.rows[0];
-    console.log('delete post function', post, user.username);
+    console.log('Delete post function:', {
+      postUserId: post.userid,
+      currentUsername: user.username,
+    });
 
     if (post.userid === user.username) {
       await db.query('DELETE FROM snowboarding_posts WHERE id = $1', [postId]);
       revalidatePath('/posts');
+      return { status: 'success' };
     } else {
-      console.log(
-        'Idiot you can not remove the post you did not make it stop being stupid'
-      );
+      return {
+        status: 'computer says no',
+        message: 'You can only delete your own posts.',
+      };
     }
   }
+
   async function handleDeleteComment(formData) {
     'use server';
     const commentId = formData.get('commentId');
@@ -57,57 +81,86 @@ export default async function postsPage() {
       [commentId]
     );
     const comment = result.rows[0];
-    console.log('delete comment function', comment, user.username);
+    console.log('Delete comment function:', commentId, user.username);
 
-    if (comment.userid === user.username) {
-      await db.query('DELETE FROM snowboarding_posts WHERE id = $1', [
+    if (comment.username === user.username) {
+      await db.query('DELETE FROM snowboarding_comments WHERE id = $1', [
         commentId,
       ]);
       revalidatePath('/posts');
+      return { status: 'success' };
     } else {
-      console.log(
-        'Idiot you can not remove the comment you did not make it stop being stupid'
-      );
+      return {
+        status: 'computer says no',
+        message: 'You can only delete your own comments.',
+      };
     }
   }
-
   return (
     <>
-      <h1> posts </h1>
-      <ul>
+      <h1>Posts</h1>
+      <ul className='posts-list'>
         {snowboardingPosts.map((post) => (
-          <li key={post.id}>
-            <Link href={`/profile/${post.userid}`}>{post.userid}</Link>
-            <p>{post.post}</p>
-            <form action={handleDeletePost} className='deleteForm'>
-              <input type='hidden' name='postId' value={post.id} />
+          <li key={post.id} className='post-container'>
+            <Link href={`/profile/${post.userid}`} className='post-user'>
+              {post.userid}
+            </Link>
+            <p className='post-content'>{post.post}</p>
 
-              <div className='postDelete' type='submit'>
-                <ToastError />
-              </div>
-            </form>
-            <div>
+            <DropdownMenuPost
+              handleDelete={handleDeletePost}
+              postId={post.id}
+            />
+
+            <div className='comments-section'>
               <h3>Comments</h3>
-              <ul>
-                {(commentsByPostId[post.id] || []).map((comment) => (
-                  <li key={comment.id}>
-                    <Link href={`profile/${comment.username}`}>
-                      {comment.username}
-                    </Link>
-                    <p>{comment.comment}</p>
-                    <form action={handleDeleteComment} className='deleteForm'>
-                      <input
-                        type='hidden'
-                        name='commentId'
-                        value={comment.id}
+              <ul className='comments-list'>
+                {(commentsByPostId[post.id] || []).map((comment) => {
+                  console.log('Rendering comment:', comment.id);
+                  return (
+                    <li key={comment.id} className='comment-container'>
+                      <Link
+                        href={`/profile/${comment.username}`}
+                        className='comment-user'
+                      >
+                        {comment.username}
+                      </Link>
+                      <p className='comment-content'>{comment.comment}</p>
+                      <DropdownMenuComment
+                        handleDeleteComments={handleDeleteComment}
+                        commentId={comment.id}
                       />
+                    </li>
+                  );
+                })}
+                <div>
+                  <form action={handleSubmission}>
+                    <label htmlFor='post'>Add Comment </label>
+                    <textarea
+                      id='post'
+                      name='post'
+                      type='text'
+                      required
+                    ></textarea>
 
-                      <div className='postDelete' type='submit'>
-                        <ToastError />
-                      </div>
-                    </form>
-                  </li>
-                ))}
+                    <input
+                      type='hidden'
+                      id='username'
+                      name='username'
+                      value={user.username}
+                    />
+                    <input
+                      type='hidden'
+                      id='post_id'
+                      name='post_id'
+                      value={post.id}
+                    />
+
+                    <button type='submit' className='input'>
+                      Post
+                    </button>
+                  </form>
+                </div>
               </ul>
             </div>
           </li>
