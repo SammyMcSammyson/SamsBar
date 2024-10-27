@@ -1,5 +1,5 @@
 import {
-  UserButton,
+  SignOutButton,
   SignInButton,
   SignUpButton,
   SignedIn,
@@ -9,23 +9,33 @@ import Link from 'next/link';
 import '../css/NavBar.css';
 
 import { auth, currentUser } from '@clerk/nextjs/server';
+import BurgerMenu from './NavBar-Burger';
 
 export default async function Header() {
   const user = await currentUser();
 
   return (
     <div className='masterContainer'>
-      <SignedIn>
-        <UserButton />
-        <Link href='/'>Home</Link>
-        <Link href='/posts'>Posts</Link>
-        {user && <Link href={`/profile/me`}>Profile</Link>}
-        <Link href='/submission'>Add Submission</Link>
-      </SignedIn>
-      <div className='signedout'>
+      <div className='signedin'>
+        <SignedIn>
+          <h1 className='titleout title'> Chalet Sam </h1>
+          <BurgerMenu />
+        </SignedIn>
+      </div>
+
+      <div>
         <SignedOut>
-          <SignInButton className="component1" mode='modal'>Sign In</SignInButton>
-          <SignUpButton mode='modal'>Sign Up</SignUpButton>
+          <div className='button-container'>
+            <SignUpButton className='component2' mode='modal'>
+              Sign Up
+            </SignUpButton>
+            <SignInButton className='component1' mode='modal'>
+              Sign In
+            </SignInButton>
+          </div>
+          <div className='text-container'>
+            <h1 className='titleout'>Chalet Sam</h1>
+          </div>
         </SignedOut>
       </div>
     </div>

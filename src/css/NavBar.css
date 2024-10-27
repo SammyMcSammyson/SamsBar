@@ -1,11 +1,51 @@
-.masterContainer {
-  background-color: aqua;
+.titleout {
+  color: var(--accent-cyan);
+  width: 50%;
 }
 
-.signedout {
+.button-container {
   display: flex;
+  float: right;
 }
 
-.component1 {
-  margin-right: 0.5rem;
+.component1,
+.component2 {
+  background-color: var(--background-ice);
+  color: var(--text-gray);
+  margin-left: 0.5rem;
+}
+
+.signedin {
+  display: grid;
+  grid-template-columns: 5fr 1fr;
+  margin-bottom: 0;
+  list-style: none;
+}
+
+@media (max-width: 320px) {
+  /* iPhone, portrait 480x320 */
+  .titleout {
+    padding: 7%;
+  }
+}
+@media (min-width: 321px) and (max-width: 410px) {
+  .titleout {
+    padding: 7%;
+    margin-left: 12%;
+  }
+}
+@media (min-width: 410px) and (max-width: 464px) {
+  .titleout {
+    padding-top: 10%;
+  }
+}
+@media (min-width: 642px) and (max-width: 961px) {
+  /*landscape iPad */
+}
+
+@media (min-width: 962px) and (max-width: 1025px) {
+  /*laptops */
+}
+@media (min-width: 1026px) {
+  /* desktops */
 }

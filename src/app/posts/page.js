@@ -258,89 +258,107 @@ export default async function postsPage() {
   return (
     <>
       <h1>Posts</h1>
-      <ul className='posts-list'>
+      <ul className='postsList'>
         {snowboardingPosts.map((post) => (
-          <li key={post.id} className='post-container'>
-            <Link href={`/profile/${post.userid}`} className='post-user'>
+          <li key={post.id} className='postContainer'>
+            <Link href={`/profile/${post.userid}`} className='postUser'>
               {post.userid}
+              <div className='commentHeader'>
+                <DropdownMenuPost
+                  handleDelete={handleDeletePost}
+                  postId={post.id}
+                />
+              </div>
             </Link>
-            <p className='post-content'>{post.post}</p>
-            <DropdownMenuPost
-              handleDelete={handleDeletePost}
-              postId={post.id}
-            />
-            <p>{post.like}</p>
-            <p>{post.dislikes}</p>
+            <p className='postContent'>{post.post}</p>
+            <div className='buttonContainer'>
+              <form action={handleLike}>
+                <input type='hidden' name='postId' value={post.id} />
+                <input type='hidden' name='username' value={user.username} />
+                <button type='submit' className='like-button'>
+                  👍
+                </button>
+              </form>
+              <p>{post.like}</p>
 
-            <form action={handleLike}>
-              <input type='hidden' name='postId' value={post.id} />
-              <input type='hidden' name='username' value={user.username} />
-              <button type='submit' className='like-button'>
-                👍
-              </button>
-            </form>
-            <form action={handleDislike}>
-              <input type='hidden' name='postId' value={post.id} />
-              <input type='hidden' name='username' value={user.username} />
-              <button type='submit' className='like-button'>
-                👎
-              </button>
-            </form>
+              <form action={handleDislike}>
+                <input type='hidden' name='postId' value={post.id} />
+                <input type='hidden' name='username' value={user.username} />
+                <button type='submit' className='like-button'>
+                  👎
+                </button>
+              </form>
+              <p>{post.dislikes}</p>
+            </div>
 
-            <div className='comments-section'>
+            <div className='commentsSection'>
               <h3>Comments</h3>
-              <ul className='comments-list'>
+              <ul className='commentsList'>
                 {(commentsByPostId[post.id] || []).map((comment) => {
-                  console.log('Rendering comment:', comment.id);
+                  console.log('comment:', comment.id);
                   return (
-                    <li key={comment.id} className='comment-container'>
+                    <li key={comment.id} className='commentContainer'>
                       <Link
                         href={`/profile/${comment.username}`}
-                        className='comment-user'
+                        className='commentUser'
                       >
                         {comment.username}
                       </Link>
-                      <p className='comment-content'>{comment.comment}</p>
-                      <DropdownMenuComment
-                        handleDeleteComments={handleDeleteComment}
-                        commentId={comment.id}
-                      />
-                      <p>{comment.like}</p>
-                      <p>{comment.dislike}</p>
+                      <div className='commentHeader'>
+                        <DropdownMenuComment
+                          handleDeleteComments={handleDeleteComment}
+                          commentId={comment.id}
+                        />
+                      </div>
+                      <p className='commentContent'>{comment.comment}</p>
 
-                      <form action={handleCommentLike}>
-                        <input type='hidden' name='postId' value={comment.id} />
-                        <input
-                          type='hidden'
-                          name='username'
-                          value={user.username}
-                        />
-                        <button type='submit' className='like-button'>
-                          👍
-                        </button>
-                      </form>
-                      <form action={handleCommentDislike}>
-                        <input type='hidden' name='postId' value={comment.id} />
-                        <input
-                          type='hidden'
-                          name='username'
-                          value={user.username}
-                        />
-                        <button type='submit' className='like-button'>
-                          👎
-                        </button>
-                      </form>
+                      <div className='buttonContainer'>
+                        <form action={handleCommentLike}>
+                          <input
+                            type='hidden'
+                            name='postId'
+                            value={comment.id}
+                          />
+                          <input
+                            type='hidden'
+                            name='username'
+                            value={user.username}
+                          />
+                          <button type='submit' className='like-button'>
+                            👍
+                          </button>
+                        </form>
+                        <p> {comment.like}</p>
+
+                        <form action={handleCommentDislike}>
+                          <input
+                            type='hidden'
+                            name='postId'
+                            value={comment.id}
+                          />
+                          <input
+                            type='hidden'
+                            name='username'
+                            value={user.username}
+                          />
+                          <button type='submit' className='like-button'>
+                            👎
+                          </button>
+                        </form>
+                        <p> {comment.dislike}</p>
+                      </div>
                     </li>
                   );
                 })}
                 <div>
                   <form action={handleSubmission}>
-                    <label htmlFor='post'>Add Comment </label>
+                    <label htmlFor='post'>Add Comment: </label>
                     <textarea
                       id='post'
                       name='post'
                       type='text'
                       required
+                      className="textbox"
                     ></textarea>
 
                     <input
