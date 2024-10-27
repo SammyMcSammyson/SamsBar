@@ -1,6 +1,6 @@
 body {
-  margin-left: 20%;
-  margin-right: 20%;
+  margin-left: 5%;
+  margin-right: 5%;
 }
 
 .postContainer {
@@ -73,7 +73,7 @@ body {
 
 .textbox {
   height: 2rem;
-  width: 13rem;
+  width: 10rem;
   margin-right: 1rem;
   align-items: center;
 }
